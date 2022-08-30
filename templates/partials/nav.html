@@ -37,3 +37,13 @@
     </div>
 </nav>
 <!--End Navbar-->
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="container mt-2">
+            <div class="alert alert-{{message.tags}}">
+            {{message}}
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
