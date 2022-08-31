@@ -10,7 +10,9 @@ from django.contrib.auth.models import User
 
 @login_required
 def index(request):
-    orders = Order.objects.all().filter(staff=request.user).order_by('-id')
+    staff_orders = Order.objects.all().filter(staff=request.user).order_by('-id')
+    orders = Order.objects.all().order_by('-id')
+    products = Product.objects.all().order_by('-id')
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -22,16 +24,23 @@ def index(request):
         form = OrderForm()
 
     context = {
+        'staff_orders': staff_orders,
         'orders': orders,
-        'form': form
+        'products': products,
+        'form': form,
+        'workers': User.objects.all()
     }
     return render(request, 'dashboard/index.html', context)
 
 @login_required
 def staff(request):
     workers = User.objects.all()
+    products = Product.objects.all()
+    orders = Order.objects.all()
     context = {
-        'workers': workers
+        'workers': workers,
+        'products': products,
+        'orders': orders
     }
     return render(request, 'dashboard/staff.html', context)
 
@@ -45,7 +54,9 @@ def staff_detail(request, pk):
 
 @login_required
 def product(request):
-    items = Product.objects.order_by('-id').all()
+    products = Product.objects.order_by('-id').all()
+    workers = User.objects.all()
+    orders = Order.objects.all()
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
@@ -56,8 +67,10 @@ def product(request):
         form = ProductForm()
 
     context = {
-        'items': items,
-        'form': form
+        'products': products,
+        'form': form,
+        'workers': workers,
+        'orders': orders
     }
     return render(request, 'dashboard/product.html', context)
 
@@ -90,7 +103,11 @@ def update_product(request, pk):
 @login_required
 def order(request):
     orders = Order.objects.all().order_by('-id')
+    workers = User.objects.all()
+    products = Product.objects.all()
     context = {
-        'orders': orders
+        'orders': orders,
+        'workers': workers,
+        'products': products
     }
     return render(request, 'dashboard/order.html', context)

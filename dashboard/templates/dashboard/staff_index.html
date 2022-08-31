@@ -24,7 +24,7 @@
                 </div>
                 <div class="card-body">
 
-                    {% if orders %}
+                    {% if staff_orders %}
                     <table class="table bg-white">
                         <thead class="bg-primary text-white">
                             <tr>
@@ -36,7 +36,7 @@
                         </thead>
                         <tbody>
                             
-                           {% for order in orders %}
+                           {% for order in staff_orders %}
                             <tr>
                                 <td>{{order.product.name}}</td>
                                 <td>{{order.product.category}}</td>
